@@ -1,0 +1,43 @@
+##Peer
+####Chaincode
+Là thuật ngữ chỉ smart contract được sử dụng trong Hyperledger Fabric, là 1 đoạn mã truy cập vào sổ cái (ledger), được viết bằng 1 ngôn ngữ lập trình được HF hỗ trợ.
+####Ledgers and chaincode
+Peer lưu giữ sổ ledger(s) và chaincode(s); các ứng dụng và admin muốn truy cập tài nguyên phải tương tác thông qua peer.
+
+Tại thời điểm ban đầu khi 1 peer được tạo ra, peer chưa có ledger và chaincode, ledger và chaincode được tạo ra và cài đặt sau.
+
+#####Multiple Ledgers
+Một peer có thể chứa nhiều ledgers, điều này hữu ích vì nó cho phép thiết kế hệ thống linh hoạt hơn.
+#####Multiple Chaincodes
+Một sổ cái cũng có thể chứa nhiều chaincodes có thể truy cập vào các ledgers có trong peer.
+
+####Applications and Peers
+App tương tác với các peers để truy cập vào ledger, có thể chia làm 2 kiểu:
+	* Tương tác truy vấn (ledger-query): gồm 3 bước
+	* Tương tác cập nhật (ledger-update): gồm 5 bước
+
+Thông qua kết nối với peer, các apps có thể thực thi chaincode để query hoặc updata ledger. Kết quả query sẽ được trả về ngay, trong khi update sẽ cần thêm sự tương tác phức tạp hơn giữa apps, peers và orderers. 
+
+####Peers and Channels
+Peer tương tác với các thành phần khác cũng như các apps thông qua các ***channel*** - 1 cơ chế mà theo đó 1 tập hợp các thành phần trong mạng blockchain có thể tương tác và giao dịch 1 cách riêng tư (**private**)
+
+Channel ~ 1 cấu trúc vật lý được hình thành bởi tập các peer vật lý.
+
+Peer cung cấp điểm kiểm soát để truy cập và quản lý kênh.
+
+####Peers and Organizations
+Mạng blockchain được quản lý bởi tập các Org chứ không phải 1 Org bất kỳ nào đó.
+
+Mạng được hình thành và quản lý bởi các Org cùng đóng góp các tài nguyên của chính Org cho mạng (tài nguyên đó là peers,....). Do đó, mạng có thể phát triển hoặc "co lại" theo tài nguyên được cung cấp bởi các Org.
+
+Mạng không phụ thuộc vào bất kỳ 1 Org riêng biệt nào, nó sẽ tiếp tục tồn tại miễn là 1 Org vẫn còn, bất kể các Org khác đến hoặc "đi". 
+
+Apps trong các Org khác nhau có thể giống hoặc khác nhau, phụ thuộc vào cách Org xử lý các bản sao ledger ở trên peers của chúng ntn.
+
+Apps sẽ kết nối với các peer trong cùng Org hoặc các peer ở ngoài Org phụ thuộc vào bản chất của việc tương tác được yêu cầu với ledger  là gì:
+	* Tương tác truy vấn (ledger-query): apps thường kết nối với các peers thuộc Org của chúng.
+	* TƯơng tác cập nhật (ledger-update): apps cần kết nối với các peers thuộc tất cả các Org để yêu cầu xác nhận (***endorse***) bản cập nhật ledger.
+
+####Peers and Identity
+
+####Peers and Orderers

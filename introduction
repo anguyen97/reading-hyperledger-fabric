@@ -1,0 +1,32 @@
+##Introduction
+
+Hyperledger Fabric là nền tảng cho các giải pháp sổ cái phân tán được củng cố bởi *kiến trúc modul* mang lại độ bảo mật (*confidentiality*), khả năng phục hồi (*resiliency*), tính linh hoạt (*flexibility*) và khả năng mở rộng (*scalability*) cao
+
+###What is blockchain?
+
+####Distributed ledger
+
+* Sổ cái phân tán ghi lại tất cả các giao dịch diễn ra trong mạng
+* ***Decentralized***: sổ cái được nhân rộng trên nhiều thành phần tham gia mạng, các thành phần hợp tác (***collaborate***) trong việc duy trì sổ cái.
+* ***Immutable***: Thông tin được ghi vào blockchain chỉ duy nhất 1 lần và không thể thay đổi, do đó việc chứng minh nguồn gốc thông tin trở nên đơn giản hơn
+
+####Smart contracts
+
+##Hyperledger Fabric Model
+
+###Assets:
+* Có thể hữu hình (phần cứng, đất đai, xe cộ,...) hoặc vô hình (sở hữu trí tuệ,...)
+* Thay đổi tài sản sử dụng **chaincode**, có thể xác định và sử dụng tài sản trong các ứng dụng HF sử dụng HC (HYperledger Compose tool)
+* Được biểu diễn trong HF dưới dạng tập hợp các cặp *key-value* với các thay đổi về trạng thái được ghi lại dưới dạng các transaction trên ***Channel ledger***, có thể biểu diễn theo JSON hoặc nhị phân.
+
+###Chaincode:
+* 
+###Ledger features:
+###Privacy through Channels:
+###Security & membership services:
+###Consensus:  
+
+
+
+
+

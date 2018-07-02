@@ -1,0 +1,55 @@
+##Identify
+
+###What is an Identify?
+* Indentity được đóng gói trong chứng chỉ kỹ thuật số X.509
+* Xác định các quyền đối với tài nguyên và quyền truy cập thông tin của các tác nhân trong mạng blockchain. Tác nhân gồm peers, orderers, client applications, administrators,...
+
+###PKIs?
+![](/home/anhnguyen/Pictures/BC/identity-pki.png) 
+A public key infrastructure (PKI) - cơ sở hạ tầng khóa công khai là tập hợp các công nghệ internet cung cấp truyền thông an toàn trong mạng. (HTTPS)
+
+####Digital Certificates - Chứng chỉ số
+Là tài liệu chứa 1 tập hợp các thuộc tính liên quan đến chủ sỡ hữu chứng chỉ.
+
+
+####Authentication, Public and Private Keys
+Yêu cầu của xác thực: đảm bảo các bên trao đổi thông điệp được đảm bảo về danh tính đối với thông điệp cụ thể được tạo ra.
+
+Cơ chế xác thực truyền thống là dựa trên chữ ký số (digital signatures). Cơ chế chữ ký số yêu cầu mỗi tác nhân giữ hai khóa:
+
+ * public key: được hiển thị và cung cấp rộng rãi, hoạt động như neo xác thực.
+ * private key: được giữ bí mật, dùng để tạo chữ ký số trên thông điệp. 
+
+![](/home/anhnguyen/Pictures/BC/identity.diagram.9.png) 
+
+Người nhận thông điệp có thể xác minh nguồn gốc và tính toàn vẹn (không thể bị sửa đổi trong quá trình truyền thông điệp) của thông điệp thông điệp bằng cách kiểm tra xem chữ ký đính kèm có hợp lệ dưới khóa công khai của người gửi hay không
+
+####Certificate Authorities - Tổ chức phát hành chứng chỉ
+CA là 1 thành phần phổ biến trong các giao thức bảo mật internet
+
+Tổ chức phát hành chứng chỉ cấp chứng chỉ cho các tác nhân khác nhau. Các chứng chỉ này được CA ký số và liên kết với tác nhân đó bằng khóa công khai của tác nhân (nghĩa là, chứng chỉ được ký bởi CA, và có chứa public key của tác nhân để xác định chứng chỉ này là của tác nhân nào). 
+
+Do đó, bất kì ai tin tưởng vào CA (và biết public key của CA), có thể tin tưởng vào tác nhân cụ thể bị ràng buộc trong chứng chỉ cũng như các thuộc tính được sở hữu bởi các tác nhân, bằng cách xác thực chữ ký của CA trên chứng chỉ của tác nhân.
+
+Các CA cũng có chứng chỉ mà chúng cung cấp, phổ biến rộng rãi. Điều này cho phép những người sử dụng dịch vụ định danh được phát hành bởi CA nhất định có thể xác minh CA đó bằng cách kiểm tra xem chứng chỉ đó có thể được tạo ra bởi 1 chủ sở hữu của khóa riêng tương ứng (CA).
+
+#####Root CAs, Intermediate CAs, Chains of Trust
+
+CAs gồm 2 loại: Root CAs và Intermidiate CAs. Các Intermediate CAs có chứng chỉ được phát hành bởi Root CAs hoặc Intermediate CAs, cho phép thiết lập "chuỗi tin cậy" cho bất kì chứng chỉ nào do bất kỳ CA nào trong chuỗi cung cấp.
+
+![](/home/anhnguyen/Pictures/BC/identity-root-ca-intermediate-cas.png) 
+
+Intermediate CAs vẫn đảm bảo khả năng mở rộng trong khi vẫn cung cấp bảo mật - giới hạn sự tiếp xúc của Root CA, gây nguy hiểm cho toàn bộ chuỗi tin cậy.
+
+Intermediate CAs giúp tăng tính linh hoạt trong việc cấp chứng chỉ trên nhiều tổ chức, do đó hữu ích đối với hệ thống blockchain cấp quyền (Fabric). vd: các Org khác nhau có thể sử dụng các Root CA khác nhau, hoặc cùng 1 Root CA nhưng với Intermediate CAs khác nhau, điều này phụ thuộc vào nhu cầu của mạng.
+
+#####Fabric CA
+Là 1 nhà cung cấp Root CA riêng (Private Root CA provider) có khả năng quản lý danh tính của các thành viên  tham gia Fabric dưới dạng chứng chỉ X.509.
+
+Fabric CA có thể được sử dụng để cung cấp và quản lý các chứng chỉ
+
+
+####Certificate Revocation Lists (CRL) - Danh sách thu hồi chứng chỉ
+CRL là 1 danh sách tham chiếu tới các chứng chỉ mà 1 CA biết bị thu hồi vì 1 lý do nào đó hoặc lý do khác.
+
+Khi một bên thứ 3 muốn xác minh danh tính của 1 thành phần khác, trước tiên nó sẽ kiểm tra CRL của CA phát hành để đảm bảo rằng chứng chỉ đó chưa bị thu h

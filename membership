@@ -1,0 +1,87 @@
+##Membership
+
+PKI cung cấp các identity có thể được xác minh thông qua chain of trust, các identity này được sử dụng để đại diện các thành viên được tin cậy trong mạng blockchain.
+***Membership Service Provider*** (MSP) xác định Root CAs và Intermediate CAs nào được tin tưởng để xác định các thành viên thuộc *miền tin cậy* (1 Org,...) bằng các cách:
+
+ * Liệt kê các identity của các thành viên
+ * Xác định CAs nào được tin cậy để phát hành các identity hợp lệ cho các thành viên của chúng
+ * hoặc kết hợp cả hai cách.
+
+=> MSP liệt kê các thành phần tham gia mạng hoặc các thành viên thuộc 1 channel.
+
+MSP có thể xác định vai trò (*roles*) cụ thể mà các tác nhân có thể đảm nhận trong phạm vi tổ chức (*Org*) mà MSP đại diện (admin, thành viên của sub-Org,... ), từ đí xác định quyền truy cập (*access privileges*) đối với các ngữ cảnh của mạng và channel (channel admins, readers, writers,...).
+
+Cấu hình của MSP được quảng bá tới tất cả các channels có các thành viên trong tổ chức (Org) tương ứng tham gia (dưới dạng ***channel MSP***). Ngòai channel MSP, các peers, orderers, clients cũng duy trì 1 **local MSP** để xác thực các thông báo thành viên bên ngoài ngữ cảnh của channel và xác định quyền trên 1 thành phần cụ thể (thành phần có khả năng cài đặt chaincode trên peer, ....)
+
+MSP cũng cho phép xác định danh sách các danh tính đã bị thu hồi (phần identity).
+ 
+####Mapping MSPs to Organizations
+Organization là 1 nhóm thành viên được quản lý.
+Mối quan hệ đơn nhất giữa 1 Org và MSP của nó giúp dễ dàng đặt tên cho MSP sau khi được tổ chức.
+
+
+#####Organization  Unit and MSPs
+1 Org thường được chia thành nhiều đơn vị tổ chức - Organization Units (OUs), mỗi OU sẽ có những trách nhiệm nhất định, và trở nên hữu ích trong việc kiểm soát các thành phần của 1 tổ chức được coi là thành viên của mạng blockchain. 
+#######################################
+vd: chỉ các identities từ đơn vị ORG1-Manufacturing mới có quyền truy cập channel, trong khi ORG1-Distribution không thể truy cập được
+
+####Local and Channel MSPs
+MSPs xuất hiện ở 2 vị trí trong mạng blockchain: channel MSPs và local MSP.
+Local MSP được định nghĩa cho client (users) và các nodes (peers and orderers)
+
+
+####MSP Levels
+Sự phân chia giữa channel và local MSPs phản ánh sự cần thiết của các org trong việc quản lý local resources (peer, nodes orderers,...) và channel resources (ledgers, smart contracts, consortia - hoạt động ở cấp channel và network) 
+
+MSP là bắt buộc ở mọi cấp độ quản trị - chúng phải được xác định cho network, channel, peer, orderer, và users.
+
+* Network MSP: 
+	* Cấu hình mạng xác định ai là thành viên trong mạng - bằng cách xác định MSP của tổ chức tham gia - cũng như thành viên nào được ủy quyền thực hiện các tác vụ quản trị (ví dụ: tạo kênh).
+* Channel MSP: 
+	* 
+* Peer MSP: 
+	* Là local MSP, được định nghĩa trên hệ thống tệp của mỗi peer, và alf MSP duy nhất của mỗi peer.  
+	* Thực hiện chức năng giống  như channel MSP, tuy nhiên chỉ áp dụng cho các peer được định nghĩa.
+* Orderer MSP:
+	* Giống với peer MSP, 1 orderer local MSP được xác định trên hệ thống tệp của node và chỉ áp dụng cho các node đó.
+	* Giống peer nodes, orderers thuộc sở hữu bởi 1 org duy nhất và do đó chỉ tồn tại duy nhất 1 MSP để liệt kê các tác nhân hoặc các nodes mà nó tin tưởng.
+
+
+####MSP Structure 
+Yếu tố quan trọng của 1 MSP là chỉ rõ Root CA hoặc Intermediate CAs được sử dụng để thiết lập nên membership của các nodes hoặc actors trong org tương ứng. Tuy nhiên, có nhiều yếu tố khác được kết hợp với 2 yếu tố trên để hỗ trợ chức năng thành viên
+
+1 . Root CAs:
+	* Thư mục này chứa danh sách các chứng chỉ X.509 tự ký của các Root CAs  được tin cậy bởi tổ chức được đại diện bởi MSP này. Phải có ít nhất một chứng chỉ Root CA X.509 trong thư mục MSP này.
+	* Là thư mục quan trọng nhất vì nó xác định các CAs mà các chứng chỉ khác phải bắt nguồn từ các CAs này mới được coi là thành viên của tổ chức tương ứng.
+
+2 . Intermediate CAs:
+	* Thư mục này chứa danh sách các chứng chỉ X.509 của các Intermediate CAs được tổ chức này tin cậy. Mỗi chứng chỉ phải được ký bởi một trong các Root CAs trong MSP hoặc bởi một Intermediate CA mà chuỗi CA phát hành cuối cùng dẫn trở lại một Root CAs đáng tin cậy.
+	* Trường hợp mạng hoạt động không có Intermediate CA, thư mục này sẽ trống.
+	* Giống như thư mục Root CAs, thư mục này định nghĩa các CA mà chỉ các chứng chỉ được phát hành bởi chúng mới được coi là thành viên của Org.
+
+3 . Organizational Units (OUs): 
+	* Được liệt kê trong file ***$FABRIC_CFG_PATH/msp/config.yaml*** và chứa danh sách các OUs được coi là 1 phần của org đại diện bởi MSP.
+	* Hữu ích khi muốn hạn chế thành viên của 1 Org chỉ giữ 1 identity ứng với 1 OU cụ thể.
+	* Nếu không có OUs nào được liệt kê, tất cả các identities là 1 phần của MSP - được xác định bởi Root CA và Intermediate CA folders sẽ được coi là thành viên của Org.
+
+4 . Administrators:
+	* Thư mục này chứa danh sách các identities xác định các actors đóng vai trò quản vị viên cho Org, tồn tại 1 hoặc nhiều identities trong danh sách.
+	* 1 actor đóng vai trò administrator không đồng nghĩa với việc actor đó có quyền quản lí tất cả các tài nguyên. Quyền hạn của 1 identity đối với việc quản trị hệ thống được quy định bởi các chính sách quản lý tài nguyên hệ thống (***policies***).
+	 Ex: chính sách của 1 channel cho phép ORG1-manufacturing administrators có quyền thêm mới 1 Org trong khi ORG1-Distribution administrator thì không.
+	* Chứng chỉ X.509 có thuộc tính **ROLE** đề cập đến vai trò của actor ***trong Org*** của nó (không phỉa trong mạng blockchain).
+	* Thuộc tính ROLE có thể được sử dụng để cấp quyền quản trị ở level channel nếu chính sách cho kênh đó cho phép bất kỳ quản trị viên nào từ Org nhất định được phép thực hiện một số chức năng kênh nhất định. Bằng cách này, vai trò của Org có thể đóng vai trò của network.
+
+5 . Revoked Certificates:
+	* Nếu identity của 1 actor bị thu hồi, thông tin về identity (không phải identity) được tổ chức trong thư mục này.
+	* Các identities dựa trên X.509, là các cặp SKI (Subject Key Identifier) - AKI (Authority Key Identifier); được kiểm tra bất cứ khi nào chứng chỉ X.509 được sử dụng để đảm bảo chứng chỉ chưa bị thu hồi.
+	* Administrator của 1 MSP (local hoặc channel) có thể thu hồi tác nhân hoặc node bằng cách thông báo CRL cập nhật của các CA phát hành các chứng chỉ bị thu hồi đó.
+
+6 . Node Identity: 
+	* Chứa identity của node, kết hợp với nội dung của ***KeyStore*** - cho phép node xác thực chính nó trong các thông điệp được gửi tới những thành viên khác trong các channel và network của nó.
+	* *Bắt buộc* đối với *local MSPs*, và có chính xác 1 chứng chỉ X.509 cho node đó.
+	* *Không được sử dụng cho channel MSPs.*
+
+7 . *KeyStore* for Private Key:
+	* 
+8 . TLS Root CA: 
+9 . TLS Intermediate CA:
